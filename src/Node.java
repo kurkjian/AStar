@@ -5,6 +5,7 @@ public class Node extends Actor {
     double f,g,h;
     Tag t;
     Node parent;
+    boolean changed;
     public Node(int r, int c)
     {
         setImage("img/empty.png");
@@ -15,6 +16,7 @@ public class Node extends Actor {
         g = 0;
         h = 0;
         parent = null;
+        changed = true;
     }
 
     public void act()

@@ -10,7 +10,7 @@ public class Runner extends Mayflower
         //Open a GUI Window with the specified title, width, and height
         //DO NOT WRITE ANY ADDITIONAL CODE IN THIS CONSTRUCTOR!
         //You should only change the arguments to the super method.
-        super("Pathfinding", 406, 429, false);
+        super("Pathfinding", 2560  , 1440, false);
     }
 
     //The init method is called as soon as the Mayflower window is Opened.
@@ -20,7 +20,7 @@ public class Runner extends Mayflower
     public void init()
     {
         //Set the argument to true if you want your game to run in Full Screen Mode
-        Mayflower.setFullScreen(false);
+        Mayflower.setFullScreen(true);
 
         //TODO: create a new World
         World startingWorld = new AStar();

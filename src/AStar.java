@@ -2,7 +2,8 @@ import mayflower.*;
 import java.util.*;
 
 public class AStar extends World {
-    int size = 16;
+    int r = 102;
+    int c = 56;
     ArrayList<Node> openSet;
     ArrayList<Node> closedSet;
     Node[][] grid;
@@ -17,13 +18,13 @@ public class AStar extends World {
         setBackground("img/black.png");
         openSet = new ArrayList<>();
         closedSet = new ArrayList<>();
-        grid = new Node[size][size];
+        grid = new Node[r][c];
         for(int i = 0; i < grid.length; i++)
         {
             for(int j = 0; j < grid[0].length; j++)
             {
                 grid[i][j] = new Node(i,j);
-                if(Math.random() < .25 && !(i == 0 && j == 0) && !(i == size - 1 && j == size - 1))
+                if(Math.random() < .25 && !(i == 0 && j == 0) && !(i == r - 1 && j == c - 1))
                 {
                     grid[i][j].t = Tag.W;
                 }
@@ -32,7 +33,7 @@ public class AStar extends World {
         }
         grid[0][0].setImage("img/green.png");
         grid[0][0].t = Tag.S;
-        end = grid[size - 1][size - 1];
+        end = grid[r - 1][c - 1];
         end.setImage("img/red.png");
         end.t = Tag.E;
         current = grid[0][0];
@@ -48,6 +49,8 @@ public class AStar extends World {
             if(!openSet.isEmpty() && searching)
             {
                 current = findLowestF();
+                current.changed = true;
+
                 if(current.i == end.i && current.j == end.j)
                 {
                     searching = false;
@@ -78,6 +81,8 @@ public class AStar extends World {
                         n.parent = current;
                         n.h = h(n);
                         n.f = n.g + n.h;
+
+                        n.changed = true;
                     }
 
                 }
@@ -85,34 +90,42 @@ public class AStar extends World {
 
             for(int i = 0; i < grid.length; i++)
             {
-                for(int j = 0; j < grid[0].length; j++)
+                col: for(int j = 0; j < grid[0].length; j++)
                 {
                     Node n = grid[i][j];
-                    if(openSet.contains(n))
+                    if(n.changed)
                     {
-                        n.setImage("img/green.png");
+                        n.changed = false;
+                        if(openSet.contains(n))
+                        {
+                            n.setImage("img/green.png");
+                        }
+                        else if(closedSet.contains(n))
+                        {
+                            n.setImage("img/red.png");
+                        }
+                        else if(n.t == Tag.W)
+                        {
+                            n.setImage("img/white.png");
+                        }
+                        else
+                        {
+                            n.setImage("img/empty.png");
+                        }
                     }
-                    else if(closedSet.contains(n))
-                    {
-                        n.setImage("img/red.png");
-                    }
-                    else if(n.t == Tag.W)
-                    {
-                        n.setImage("img/white.png");
-                    }
-                    else
-                    {
-                        n.setImage("img/empty.png");
-                    }
+
+
                 }
             }
 
             Node temp = current;
             temp.setImage("img/blue.png");
+            temp.changed = true;
             while(temp.parent != null)
             {
                 temp = temp.parent;
                 temp.setImage("img/blue.png");
+                temp.changed = true;
             }
 
             count = 0;
